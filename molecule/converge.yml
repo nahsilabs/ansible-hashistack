@@ -1,0 +1,20 @@
+- name:  role
+  hosts: all
+  become: true
+  vars:
+    consul_version: "1.18.0"
+    consul_config:
+      datacenter: "molecule"
+      log_level: "info"
+      data_dir: "/var/lib/consul/"
+      bind_addr: "0.0.0.0"
+      ui_config:
+        enabled: true
+
+  collections:
+    - nahsilabs.hashistack
+
+  tasks:
+    - name: Run consul role
+      include_role:
+        name: consul

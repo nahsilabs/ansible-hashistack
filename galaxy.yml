@@ -1,0 +1,19 @@
+namespace: nahsilabs
+name: hashistack
+version: 0.0.1 # x-release-please-version
+readme: README.md
+authors:
+  - Anatolios Laskaris <nahsi@nahsi.dev> (https://nahsi.dev)
+
+description: Collection of roles to setup and manage HashiCorp products
+license_file: LICENSE
+
+tags:
+  - cloud
+  - hashicorp
+  - hashistack
+
+repository: https://github.com/nahsilabs/ansible-hashistack/
+documentation: https://github.com/nahsilabs/ansible-hashistack/tree/main/README.md
+homepage: https://github.com/nahsilabs/ansible-hashistack/
+issues: https://github.com/nahsilabs/ansible-hahistack/issues

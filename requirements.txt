@@ -1,0 +1,7 @@
+ansible==9.3.0
+
+# molecule
+pytest==7.2.1
+pytest-testinfra==7.0.0
+molecule==24.2.0
+molecule-qemu==0.5.7
