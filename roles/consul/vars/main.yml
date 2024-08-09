@@ -9,4 +9,3 @@ _checksums: "{{ lookup('url', consul_download_url + '/consul/' + consul_version 
 
 _archive: "consul_{{ consul_version }}_linux_{{ _arch }}.zip"
 _archive_url: "{{ consul_download_url }}/consul/{{ consul_version }}/{{ _archive }}"
-_archive_dir: "/tmp/{{ _archive | splitext | first }}"

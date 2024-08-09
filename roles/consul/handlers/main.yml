@@ -1,7 +1,8 @@
 - name: restart consul
-  service:
+  systemd_service:
     name: consul
     state: restarted
+    daemon_reload: true
   when: not skip_handlers
 
 - name: reload consul

@@ -1,4 +1,5 @@
-ansible==9.3.0
+ansible==10.2.0
+jmespath==1.0.1
 
 # molecule
 pytest==7.2.1

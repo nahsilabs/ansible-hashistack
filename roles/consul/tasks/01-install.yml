@@ -1,15 +1,3 @@
-- name: download consul to localhost
-  become: false
-  delegate_to: localhost
-  get_url:
-    url: "{{ _archive_url }}"
-    dest: "{{ role_path }}/files/{{ _archive }}"
-    checksum: "sha256:{{ _archive_checksum }}"
-  register: _download_archive
-  until: _download_archive is succeeded
-  retries: 5
-  delay: 2
-
 - name: create consul system group
   group:
     name: "{{ consul_group }}"
@@ -37,37 +25,48 @@
     loop_var: dir
     label: "{{ dir.key }}"
 
-- name: create archive directory
-  become: false
-  delegate_to: localhost
-  file:
-    state: directory
-    path: "{{ _archive_dir }}"
+- name: install unzip
+  apt:
+    name: "unzip"
+    install_recommends: false
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    state: present
 
-- name: unpack consul
-  become: false
-  delegate_to: localhost
-  unarchive:
-    src: "{{ role_path }}/files/{{ _archive }}"
-    dest: "{{ _archive_dir }}"
-    creates: "{{ _archive_dir }}/consul"
+- name: download consul
+  block:
+  - name: create a temporary directory
+    ansible.builtin.tempfile:
+      state: directory
+    register: _temp_dir
 
-- name: propagate consul binary
-  copy:
-    src: "{{ _archive_dir }}/consul"
-    dest: "/usr/bin/consul"
-    owner: root
-    group: root
-    mode: 0555
-  notify: restart consul
+  - name: download consul archive
+    get_url:
+      url: "{{ _archive_url }}"
+      dest: "{{ _temp_dir.path }}/{{ _archive }}"
+      checksum: "sha256:{{ _archive_checksum }}"
+    register: _download_archive
+    until: _download_archive is succeeded
+    retries: 5
+    delay: 2
 
-- name: delete archive directory
-  become: false
-  delegate_to: localhost
-  file:
-    dest: "{{ _archive_dir }}"
-    state: absent
-  when: not lookup("env", "MOLECULE_SCENARIO_NAME") | default("")
+  - name: unpack consul
+    unarchive:
+      src: "{{ _temp_dir.path }}/{{ _archive }}"
+      dest: "/usr/bin/"
+      include: ["consul"]
+      remote_src: true
+    notify: restart consul
+
+  always:
+    - name: remove temporary directory
+      ansible.builtin.file:
+        path: "{{ _temp_dir.path }}"
+        state: absent
+      when:
+        - _temp_dir.path is defined
+        - not lookup("env", "MOLECULE_SCENARIO_NAME") | default("")
 
 - name: create consul config
   tags: config
@@ -91,7 +90,7 @@
   notify: restart consul
 
 - name: enable consul
-  systemd:
+  systemd_service:
     name: consul
     enabled: true
     daemon_reload: true

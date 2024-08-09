@@ -2,9 +2,9 @@
 
 ## Roles
 
-- [nomad](https://github.com/nahsilabs/hashistack/tree/main/roles/nomad)
-- [consul](https://github.com/nahsilabs/hashistack/tree/main/roles/consul)
-- [vault](https://github.com/nahsilabs/hashistack/tree/main/roles/vault)
+- [nomad](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/nomad)
+- [consul](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/consul)
+- [vault](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/vault)
 
 ## Roles Philosophy
 
@@ -31,7 +31,7 @@ consul_config:
   server: false
 ```
 
-And then copied to host using `no_nice_json` filter:
+And then copied to host using `to_nice_json` filter:
 
 ```yml
 - name: copy consul config

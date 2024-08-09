@@ -23,8 +23,6 @@ consul_dirs:
     mode: "u=rwX,g=rX,o="
   scripts:
     path: "{{ consul_dir }}/script.d"
-  logs:
-    path: "/var/log/consul"
   data:
     path: "/var/lib/consul"
     mode: "u=rwX,g=rX,o="
