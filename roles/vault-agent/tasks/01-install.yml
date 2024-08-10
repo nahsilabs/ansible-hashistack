@@ -36,7 +36,7 @@
     autoremove: true
     state: present
 
-- name: download vault_agent archive
+- name: download vault-agent archive
   get_url:
     url: "{{ _archive_url }}"
     dest: "{{ vault_agent_dirs.archives.path }}/{{ _archive }}"
@@ -46,13 +46,13 @@
   retries: 5
   delay: 2
 
-- name: unpack vault_agent
+- name: unpack vault-agent
   unarchive:
     src: "{{ vault_agent_dirs.archives.path }}/{{ _archive }}"
-    dest: "/usr/bin/"
-    include: ["vault_agent"]
+    dest: "{{ vault_agent_dir }}"
+    include: ["vault"]
     remote_src: true
-  notify: restart vault_agent
+  notify: restart vault-agent
 
 - name: create vault-agent config
   tags: config

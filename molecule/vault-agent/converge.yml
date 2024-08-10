@@ -32,6 +32,6 @@
     - nahsilabs.hashistack
 
   tasks:
-    - name: Run vault role
+    - name: Run vault-agent role
       include_role:
-        name: vault
+        name: vault-agent

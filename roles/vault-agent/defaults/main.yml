@@ -14,14 +14,12 @@ vault_agent_dirs:
     path: "{{ vault_agent_dir }}"
   templates:
     path: "{{ vault_agent_dir }}/template.d"
-  configs:
-    path: "{{ vault_agent_dir }}/config.d"
   certs:
     path: "{{ vault_agent_dir }}/certs"
   secrets:
     path: "{{ vault_agent_dir }}/secrets"
-  logs:
-    path: "/var/log/vault-agent"
+  archives:
+    path: "{{ vault_agent_dir }}/archives"
 
 vault_agent_unit: |
   [Unit]
@@ -31,9 +29,9 @@ vault_agent_unit: |
   After=network-online.target
 
   [Service]
-  User=root
-  Group=root
-  ExecStart=/usr/bin/vault-agent agent -config={{ vault_agent_dir }}/vault-agent.json -config={{ vault_agent_dirs.configs }}
+  User={{ vault_agent_user }}
+  Group={{ vault_agent_group }}
+  ExecStart={{ vault_agent_dir }}/vault agent -config={{ vault_agent_dir }}/vault-agent.json
   ExecReload=/bin/kill --signal HUP $MAINPID
   KillMode=process
   KillSignal=SIGINT

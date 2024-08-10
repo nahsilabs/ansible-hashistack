@@ -28,6 +28,7 @@ jobs:
           - consul
           - nomad
           - vault
+          - vault-agent
 
     steps:
       - uses: actions/checkout@v4
