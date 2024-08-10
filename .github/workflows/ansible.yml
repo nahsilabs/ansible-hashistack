@@ -51,7 +51,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.HOME }}/.cache/molecule/.qemu
-          key: ${{ runner.arch }}-qemu
+          key: ${{ runner.os }}-qemu
 
       - name: Run ${{ matrix.scenario }} scenario
         run: molecule test --scenario-name "${{ matrix.scenario }}"
