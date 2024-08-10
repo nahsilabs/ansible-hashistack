@@ -32,7 +32,7 @@ jobs:
 
       - name: Prepare for KVM usage
         run: |
-          sudo apt-get install -y mkisofs qemu-system-x86 qemu-utils
+          sudo apt-get install -y mkisofs qemu-system-x86 qemu-system-aarch64 qemu-utils
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
