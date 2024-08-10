@@ -1,0 +1,80 @@
+- name:  role
+  hosts: all
+  become: true
+  vars:
+    # Consul
+    consul_version: "1.18.0"
+    consul_config:
+      datacenter: "molecule"
+      log_level: "info"
+      data_dir: "/var/lib/consul/"
+      bind_addr: "0.0.0.0"
+      ui_config:
+        enabled: true
+      enable_local_script_checks: true
+      server: true
+      bootstrap_expect: 1
+
+    consul_configs:
+      log_level:
+        log_level: "info"
+
+    consul_services:
+      example:
+        service:
+          id: "example"
+          name: "example"
+          port: 12345
+          check:
+            id: "example"
+            name: "example"
+            args:
+              - "/opt/consul/script.d/example.sh"
+            interval: "30s"
+
+    consul_scripts:
+      example: |
+        #! /usr/bin/env bash
+        echo "example"
+
+    # Nomad
+    nomad_version: "1.3.2"
+
+    nomad_config:
+      datacenter: "dev"
+      data_dir: "/var/lib/nomad/"
+
+      bind_addr: !unsafe '{{ GetPrivateIP }}'
+      addresses:
+        http: "0.0.0.0"
+        rpc: "0.0.0.0"
+        serf: "0.0.0.0"
+
+      client:
+        enabled: true
+        server_join:
+          retry_join:
+            - "127.0.0.1"
+          retry_max: 3
+          retry_interval: "15s"
+
+      server:
+        enabled: true
+        bootstrap_expect: 1
+        raft_protocol: 3
+
+    nomad_configs:
+      log_level:
+        log_level: "info"
+
+  collections:
+    - nahsilabs.hashistack
+
+  tasks:
+    - name: Run consul role
+      include_role:
+        name: consul
+
+    - name: Run nomad role
+      include_role:
+        name: nomad

@@ -5,7 +5,7 @@ from HashiCorp.
 
 ## Role Variables
 
-See [defaults/](https://github.com/nahsi/ansible-consul/blob/master/defaults/)
+See [defaults/](https://github.com/nahsilabs/ansible-hashistack/blob/main/roles/consul/defaults/)
 for details.
 
 #### `consul_version`

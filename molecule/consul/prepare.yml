@@ -1,0 +1,71 @@
+- name: Prepare
+  become: true
+  hosts: all
+  tasks:
+    - name: install dnsmasq
+      apt:
+        name:
+          - "dnsmasq"
+        install_recommends: false
+        update_cache: true
+        state: present
+
+    - name: create dnsmasq configuration
+      copy:
+        content: |
+          interface=lo
+          bind-interfaces
+
+          server=1.1.1.1
+          server=/consul/127.0.0.1#8600
+
+          local-service
+          no-poll
+          no-resolv
+
+        dest: /etc/dnsmasq.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: stop systemd-resolved
+      systemd:
+        name: systemd-resolved
+        enabled: false
+        state: stopped
+
+    - name: create resolv.conf
+      copy:
+        content: |
+          nameserver 127.0.0.1
+          search service.consul node.consul
+        dest: "/etc/resolv.conf"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: enable dnsmasq
+      systemd:
+        name: dnsmasq
+        enabled: true
+        state: started
+
+    - name: create directories directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /opt/consul/service.d
+        - /opt/consul/config.d
+        - /opt/consul/script.d
+        - /opt/nomad/config.d
+
+    - name: create dummy files
+      file:
+        path: "{{ item }}"
+        state: touch
+      loop:
+        - /opt/consul/service.d/dummy.json
+        - /opt/consul/config.d/dummy.json
+        - /opt/consul/script.d/dummy.sh
+        - /opt/nomad/config.d/dummy.json
