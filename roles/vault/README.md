@@ -5,7 +5,8 @@ for managing secrets from HashiCorp.
 
 ## Role Variables
 
-See [defaults/](https://github.com/nahsilabs/ansible-hashistack/blob/main/roles/vault/defaults/)
+See
+[defaults/](https://github.com/nahsilabs/ansible-hashistack/blob/main/roles/vault/defaults/)
 for details and examples.
 
 #### `vault_version`
@@ -44,17 +45,15 @@ for details and examples.
 #### `skip_handlers`
 
 - skip Vault restart/reload - useful when building images with Packer
-- default: `false`
 
 #### `skip_enable`
 
 - skip Vault enabling in systemd - useful when building images with Packer
-- default: `false`
 
 ## Tags
 
-- `config` - update Vault unit/service file and sync configuration files
+- `config` - update Vault unit file and sync configuration files
 
 ## Author
 
-- **Anatoly Laskaris** - [nahsi](https://github.com/nahsi)
+- **Anatolios Laskaris** - [nahsi](https://github.com/nahsi)

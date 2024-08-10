@@ -1,0 +1,82 @@
+- name: create vault-agent system group
+  group:
+    name: "{{ vault_agent_group }}"
+    system: true
+    state: present
+  when: vault_agent_group != "root"
+
+- name: create vault-agent system user
+  user:
+    name: "{{ vault_agent_user }}"
+    system: true
+    shell: "/sbin/nologin"
+    group: "{{ vault_agent_group }}"
+    create_home: false
+    state: present
+  when: vault_agent_group != "root"
+
+- name: create vault-agent directories
+  file:
+    path: "{{ dir.value.path }}"
+    state: directory
+    owner: "{{ dir.group | default(vault_agent_user) }}"
+    group: "{{ dir.group | default(vault_agent_group) }}"
+    mode: "{{ dir.value.mode | default(755) }}"
+  loop: "{{ vault_agent_dirs | dict2items }}"
+  loop_control:
+    loop_var: dir
+    label: "{{ dir.key }}"
+
+- name: install unzip
+  apt:
+    name: "unzip"
+    install_recommends: false
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    state: present
+
+- name: download vault_agent archive
+  get_url:
+    url: "{{ _archive_url }}"
+    dest: "{{ vault_agent_dirs.archives.path }}/{{ _archive }}"
+    checksum: "sha256:{{ _archive_checksum }}"
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+
+- name: unpack vault_agent
+  unarchive:
+    src: "{{ vault_agent_dirs.archives.path }}/{{ _archive }}"
+    dest: "/usr/bin/"
+    include: ["vault_agent"]
+    remote_src: true
+  notify: restart vault_agent
+
+- name: create vault-agent config
+  tags: config
+  copy:
+    content: "{{ vault_agent_config | to_nice_json }}"
+    dest: "{{ vault_agent_dirs.main.path }}/vault-agent.json"
+    owner: "{{ vault_agent_user }}"
+    group: "{{ vault_agent_group }}"
+    mode: 0640
+  notify: restart vault-agent
+
+- name: create vault-agent unit file
+  tags: config
+  copy:
+    content: "{{ vault_agent_unit }}"
+    dest: "/etc/systemd/system/vault-agent.service"
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart vault-agent
+
+- name: enable vault-agent
+  systemd:
+    name: vault-agent
+    enabled: true
+    daemon_reload: true
+  when: not skip_enable

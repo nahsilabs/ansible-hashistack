@@ -1,0 +1,5 @@
+- name: restart vault-agent
+  service:
+    name: vault-agent
+    state: restarted
+  when: not skip_handlers

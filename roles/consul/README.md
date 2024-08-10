@@ -60,10 +60,10 @@ for details.
 
 ## Tags
 
-- `config` - update Consul unit/service file and sync configuration files
+- `config` - update Consul unit file and sync configuration files
 - `services` - sync Consul services
 - `scripts` - sync Consul scripts
 
 ## Author
 
-- **Anatoly Laskaris** - [nahsi](https://github.com/nahsi)
+- **Anatolios Laskaris** - [nahsi](https://github.com/nahsi)

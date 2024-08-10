@@ -52,8 +52,8 @@ for details and examples.
 
 ## Tags
 
-- `config` - update Nomad unit/service file and sync configuration files
+- `config` - update Nomad unit file and sync configuration files
 
 ## Author
 
-- **Anatoly Laskaris** - [nahsi](https://github.com/nahsi)
+- **Anatolios Laskaris** - [nahsi](https://github.com/nahsi)
