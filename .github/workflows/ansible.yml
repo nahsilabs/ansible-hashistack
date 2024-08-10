@@ -50,7 +50,7 @@ jobs:
       - name: Cache qemu images
         uses: actions/cache@v4
         with:
-          path: ${{ env.HOME }}/.cache/molecule/.qemu
+          path: /home/ubuntu/.cache/molecule/.qemu
           key: ${{ runner.os }}-qemu
 
       - name: Run ${{ matrix.scenario }} scenario
