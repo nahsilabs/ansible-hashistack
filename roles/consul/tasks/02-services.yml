@@ -15,7 +15,7 @@
     group: "{{ consul_group }}"
     mode: 0640
     validate: "consul validate -config-format=json {{ consul_dir }}/consul.json %s"
-  notify: reload consul
+  notify: restart consul
   loop: "{{ consul_services | dict2items }}"
   loop_control:
     loop_var: "service"
@@ -31,4 +31,4 @@
     path: "{{ item }}"
     state: absent
   loop: "{{ _present | difference(_copied) }}"
-  notify: reload consul
+  notify: restart consul

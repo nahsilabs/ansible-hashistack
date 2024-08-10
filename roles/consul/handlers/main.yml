@@ -4,9 +4,3 @@
     state: restarted
     daemon_reload: true
   when: not skip_handlers
-
-- name: reload consul
-  command: "consul reload"
-  environment:
-    CONSUL_HTTP_TOKEN: "{{ lookup('env', 'CONSUL_HTTP_TOKEN') | default('') }}"
-  when: not skip_handlers

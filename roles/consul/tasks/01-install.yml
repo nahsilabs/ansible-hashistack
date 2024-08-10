@@ -34,39 +34,23 @@
     autoremove: true
     state: present
 
-- name: download consul
-  block:
-  - name: create a temporary directory
-    ansible.builtin.tempfile:
-      state: directory
-    register: _temp_dir
+- name: download consul archive
+  get_url:
+    url: "{{ _archive_url }}"
+    dest: "{{ consul_dirs.archives.path }}/{{ _archive }}"
+    checksum: "sha256:{{ _archive_checksum }}"
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
 
-  - name: download consul archive
-    get_url:
-      url: "{{ _archive_url }}"
-      dest: "{{ _temp_dir.path }}/{{ _archive }}"
-      checksum: "sha256:{{ _archive_checksum }}"
-    register: _download_archive
-    until: _download_archive is succeeded
-    retries: 5
-    delay: 2
-
-  - name: unpack consul
-    unarchive:
-      src: "{{ _temp_dir.path }}/{{ _archive }}"
-      dest: "/usr/bin/"
-      include: ["consul"]
-      remote_src: true
-    notify: restart consul
-
-  always:
-    - name: remove temporary directory
-      ansible.builtin.file:
-        path: "{{ _temp_dir.path }}"
-        state: absent
-      when:
-        - _temp_dir.path is defined
-        - not lookup("env", "MOLECULE_SCENARIO_NAME") | default("")
+- name: unpack consul
+  unarchive:
+    src: "{{ consul_dirs.archives.path }}/{{ _archive }}"
+    dest: "/usr/bin/"
+    include: ["consul"]
+    remote_src: true
+  notify: restart consul
 
 - name: create consul config
   tags: config
