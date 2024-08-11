@@ -30,9 +30,6 @@ jobs:
           - vault
           - vault-agent
 
-    env:
-      MOLECULE_EPHEMERAL_DIRECTORY: "${{ github.workspace }}/.molecule"
-
     steps:
       - uses: actions/checkout@v4
 
@@ -56,7 +53,7 @@ jobs:
       - name: Cache qemu images
         uses: actions/cache@v4
         with:
-          path: .molecule/.qemu/images
+          path: /home/runner/.cache/molecule/.qemu/images
           key: ${{ runner.os }}-qemu
           save-always: true
 
