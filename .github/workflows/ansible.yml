@@ -30,9 +30,6 @@ jobs:
           - vault
           - vault-agent
 
-    env:
-      MOLECULE_EPHEMERAL_DIRECTORY: "${{ github.workspace }}/.molecule"
-
     steps:
       - uses: actions/checkout@v4
 
@@ -57,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/molecule/.qemu/images
-          key: ${{ runner.os }}-qemu-${{ hashFiles('.molecule/.qemu/images/*') }}
+          key: ${{ runner.os }}-qemu
           save-always: true
 
       - name: Run ${{ matrix.scenario }} scenario

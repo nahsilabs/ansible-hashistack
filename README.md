@@ -5,6 +5,7 @@
 - [nomad](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/nomad)
 - [consul](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/consul)
 - [vault](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/vault)
+- [vaultagent](https://github.com/nahsilabs/ansible-hashistack/tree/main/roles/vaultagent)
 
 ## Roles Philosophy
 
