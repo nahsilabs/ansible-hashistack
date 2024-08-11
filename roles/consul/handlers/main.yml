@@ -4,3 +4,9 @@
     state: restarted
     daemon_reload: true
   when: not skip_handlers
+
+- name: restart systemd-resolved
+  systemd_service:
+    name: systemd-resolved
+    state: restarted
+    daemon_reload: true

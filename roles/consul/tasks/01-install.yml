@@ -79,3 +79,24 @@
     enabled: true
     daemon_reload: true
   when: not skip_enable
+
+- name: create /etc/systemd/resolved.conf.d
+  file:
+    dest: "/etc/systemd/resolved.conf.d/"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: forward DNS to consul
+  copy:
+    content: |
+      [Resolve]
+      DNS=127.0.0.1:8600
+      DNSSEC=false
+      Domains=~consul
+    dest: /etc/systemd/resolved.conf.d/consul.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart systemd-resolved
