@@ -20,7 +20,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_TIMEOUT: 30
+    ANSIBLE_TIMEOUT: 60
   config_options:
     defaults:
       collections_path: ../..

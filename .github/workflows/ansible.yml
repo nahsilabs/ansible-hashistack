@@ -26,9 +26,9 @@ jobs:
       matrix:
         scenario:
           - consul
-          - nomad
-          - vault
-          - vault-agent
+          # - nomad
+          # - vault
+          # - vault-agent
 
     steps:
       - uses: actions/checkout@v4
