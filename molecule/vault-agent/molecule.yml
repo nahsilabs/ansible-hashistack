@@ -1,0 +1,30 @@
+driver:
+  name: molecule-qemu
+
+platforms:
+  - name: amd64
+    image_arch: x86_64
+    image_url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+    image_checksum: sha256:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS
+    network_ssh_port: 2227
+    vm_cpus: 2
+    vm_memory: 1024
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_TIMEOUT: 60
+  config_options:
+    defaults:
+      collections_path: ../..
+
+verifier:
+  name: testinfra
+  directory: ./tests
+  env:
+    # get rid of the DeprecationWarning messages of third-party libs,
+    # see https://docs.pytest.org/en/latest/warnings.html#deprecationwarning-and-pendingdeprecationwarning
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    # show which tests where executed in test output
+    v: 1

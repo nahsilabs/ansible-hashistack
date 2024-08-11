@@ -1,0 +1,21 @@
+galaxy_info:
+  namespace: nahsilabs
+  author: Anatolios Laskaris
+  role_name: vault-agent
+  description: Manage HashiCorp vault-agent
+  license: MIT
+  min_ansible_version: 2.12
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble
+
+  galaxy_tags:
+    - cloud
+    - system
+    - hashicorp
+    - vault
+    - secrets
+
+  dependencies: []

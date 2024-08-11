@@ -1,0 +1,11 @@
+_arch_map:
+  amd64: amd64
+  x86_64: amd64
+  aarch64: arm64
+  64-bit: amd64
+_arch: "{{ _arch_map[ansible_architecture] }}"
+
+_checksums: "{{ lookup('url', vault_download_url + '/vault/' + vault_version + '/vault_{{ vault_version }}_SHA256SUMS', wantlist=True) | list }}"
+
+_archive: "vault_{{ vault_version }}_linux_{{ _arch }}.zip"
+_archive_url: "{{ vault_download_url }}/vault/{{ vault_version }}/{{ _archive }}"

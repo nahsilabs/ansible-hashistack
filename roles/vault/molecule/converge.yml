@@ -1,0 +1,25 @@
+- name: Install vault
+  become: true
+  hosts: all
+  vars:
+    vault_version: "1.9.3"
+
+    vault_config:
+      ui: true
+      api_addr: "http://127.0.0.1"
+
+      listener:
+        tcp:
+          tls_disable: true
+          address: "127.0.0.1:8200"
+
+      storage:
+        file:
+          path: "/var/lib/vault"
+
+    vault_configs:
+      log_level:
+        log_level: "info"
+
+  roles:
+    - ansible-vault

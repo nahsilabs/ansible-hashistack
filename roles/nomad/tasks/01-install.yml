@@ -1,0 +1,83 @@
+- name: create nomad system group
+  group:
+    name: "{{ nomad_group }}"
+    system: true
+    state: present
+  when: nomad_group != "root"
+
+- name: create nomad system user
+  user:
+    name: "{{ nomad_user }}"
+    system: true
+    shell: "/sbin/nologin"
+    group: "{{ nomad_group }}"
+    create_home: false
+    state: present
+  when: nomad_group != "root"
+
+- name: create nomad directories
+  file:
+    path: "{{ dir.value.path }}"
+    state: directory
+    owner: "{{ dir.group | default(nomad_user) }}"
+    group: "{{ dir.group | default(nomad_group) }}"
+    mode: "{{ dir.value.mode | default(755) }}"
+  loop: "{{ nomad_dirs | dict2items }}"
+  loop_control:
+    loop_var: dir
+    label: "{{ dir.key }}"
+
+- name: install unzip
+  apt:
+    name: "unzip"
+    install_recommends: false
+    update_cache: true
+    autoclean: true
+    autoremove: true
+    state: present
+
+- name: download nomad archive
+  get_url:
+    url: "{{ _archive_url }}"
+    dest: "{{ nomad_dirs.archives.path }}/{{ _archive }}"
+    checksum: "sha256:{{ _archive_checksum }}"
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+
+- name: unpack nomad
+  unarchive:
+    src: "{{ nomad_dirs.archives.path }}/{{ _archive }}"
+    dest: "/usr/bin/"
+    include: ["nomad"]
+    remote_src: true
+  notify: restart nomad
+
+- name: create nomad config
+  tags: config
+  copy:
+    content: "{{ nomad_config | to_nice_json }}"
+    dest: "{{ nomad_dirs.main.path }}/nomad.json"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0640
+    validate: "nomad config validate %s"
+  notify: restart nomad
+
+- name: create nomad unit file
+  tags: config
+  copy:
+    content: "{{ nomad_unit }}"
+    dest: "/etc/systemd/system/nomad.service"
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart nomad
+
+- name: enable nomad
+  systemd:
+    name: nomad
+    enabled: true
+    daemon_reload: true
+  when: not skip_enable

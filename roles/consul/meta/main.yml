@@ -1,0 +1,23 @@
+galaxy_info:
+  namespace: nahsilabs
+  author: Anatoly Laskaris
+  role_name: consul
+  description: Manage HashiCorp Consul
+  license: MIT
+  min_ansible_version: 2.12
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble
+
+  galaxy_tags:
+    - cloud
+    - system
+    - networking
+    - monitoring
+    - servicemesh
+    - hashicorp
+    - consul
+
+  dependencies: []

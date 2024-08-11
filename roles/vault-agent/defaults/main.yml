@@ -1,0 +1,42 @@
+skip_handlers: false
+skip_enable: false
+
+vault_agent_download_url: "https://releases.hashicorp.com"
+
+vault_agent_templates: {}
+
+vault_agent_user: "root"
+vault_agent_group: "root"
+
+vault_agent_dir: "/opt/vault-agent"
+vault_agent_dirs:
+  main:
+    path: "{{ vault_agent_dir }}"
+  templates:
+    path: "{{ vault_agent_dir }}/template.d"
+  certs:
+    path: "{{ vault_agent_dir }}/certs"
+  secrets:
+    path: "{{ vault_agent_dir }}/secrets"
+  archives:
+    path: "{{ vault_agent_dir }}/archives"
+
+vault_agent_unit: |
+  [Unit]
+  Description="HashiCorp vault-agent"
+  Documentation=https://www.vaultproject.io/docs/agent
+  Requires=network-online.target
+  After=network-online.target
+
+  [Service]
+  User={{ vault_agent_user }}
+  Group={{ vault_agent_group }}
+  ExecStart={{ vault_agent_dir }}/vault agent -config={{ vault_agent_dir }}/vault-agent.json
+  ExecReload=/bin/kill --signal HUP $MAINPID
+  KillMode=process
+  KillSignal=SIGINT
+  Restart=on-failure
+  RestartSec=5
+
+  [Install]
+  WantedBy=multi-user.target

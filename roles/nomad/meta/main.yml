@@ -1,0 +1,21 @@
+galaxy_info:
+  namespace: nahsilabs
+  author: Anatolios Laskaris
+  description: Manage HashiCorp Nomad
+  role_name: nomad
+  license: MIT
+  min_ansible_version: 2.12
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble
+
+  galaxy_tags:
+    - cloud
+    - system
+    - hashicorp
+    - orchestration
+    - nomad
+
+  dependencies: []

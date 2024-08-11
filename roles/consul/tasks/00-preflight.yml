@@ -1,0 +1,88 @@
+- name: check "consul_download_url" variable
+  tags: always
+  assert:
+    that:
+      - consul_download_url is defined
+      - consul_download_url is string
+      - consul_download_url | length
+    quiet: true
+
+- name: check if "{{ consul_download_url }}" is online
+  become: false
+  run_once: true
+  delegate_to: localhost
+  check_mode: false
+  uri:
+    url: "{{ consul_download_url }}"
+    status_code: 200
+  register: _result
+  retries: "3"
+  delay: "5"
+  until: _result.status == 200
+
+- name: check "consul_version" variable
+  tags: always
+  assert:
+    that:
+      - consul_version is defined
+      - consul_version is string
+      - consul_version | length
+    quiet: true
+
+- name: check "consul_dirs" variable
+  tags: always
+  assert:
+    that:
+      - consul_dirs is defined
+      - consul_dirs is mapping
+      - consul_dirs | length
+    quiet: true
+
+- name: check "consul_config" variable
+  tags: always
+  assert:
+    that:
+      - consul_config is defined
+      - consul_config is mapping
+      - consul_config | length
+    quiet: true
+
+- name: check "consul_configs" variable
+  tags: always
+  assert:
+    that:
+      - consul_configs is defined
+      - consul_configs is mapping
+    quiet: true
+
+- name: check "consul_services" variable
+  tags: always
+  assert:
+    that:
+      - consul_services is defined
+      - consul_services is mapping
+    quiet: true
+
+- name: check "consul_scripts" variable
+  tags: always
+  assert:
+    that:
+      - consul_scripts is defined
+      - consul_scripts is mapping
+    quiet: true
+
+- name: check "consul_unit" variable
+  tags: always
+  assert:
+    that:
+      - consul_unit is defined
+      - consul_unit is string
+      - consul_unit | length
+    quiet: true
+
+- name: set checksum for {{ _arch }} architecture
+  set_fact:
+    _archive_checksum: "{{ item.split(' ')[0] }}"
+  with_items: "{{ _checksums }}"
+  when:
+    - "('linux_' + _arch + '.zip') in item"
