@@ -34,4 +34,4 @@
   tasks:
     - name: Run vault-agent role
       include_role:
-        name: vault-agent
+        name: vaultagent
