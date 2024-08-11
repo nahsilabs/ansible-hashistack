@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/nahsilabs/ansible-hashistack/compare/v1.0.1...v1.0.2) (2024-08-11)
+
+
+### Bug Fixes
+
+* Use systemd-resolved instead of dnsmasq for Consul DNS forwarding ([#8](https://github.com/nahsilabs/ansible-hashistack/issues/8)) ([017887c](https://github.com/nahsilabs/ansible-hashistack/commit/017887cedde4c378b01137905a41530bf6bf7e82))
+
 ## [1.0.1](https://github.com/nahsilabs/ansible-hashistack/compare/v1.0.0...v1.0.1) (2024-08-11)
 
 
