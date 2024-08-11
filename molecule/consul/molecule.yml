@@ -9,13 +9,13 @@ platforms:
     network_ssh_port: 2227
     vm_cpus: 2
     vm_memory: 1024
-  # - name: arm64
-  #   image_url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm64.img
-  #   image_arch: aarch64
-  #   image_checksum: sha256:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS
-  #   network_ssh_port: 2228
-  #   vm_cpus: 2
-  #   vm_memory: 1024
+  - name: arm64
+    image_url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm64.img
+    image_arch: aarch64
+    image_checksum: sha256:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS
+    network_ssh_port: 2228
+    vm_cpus: 2
+    vm_memory: 1024
 
 provisioner:
   name: ansible

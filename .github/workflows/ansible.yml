@@ -26,9 +26,12 @@ jobs:
       matrix:
         scenario:
           - consul
-          # - nomad
-          # - vault
-          # - vault-agent
+          - nomad
+          - vault
+          - vault-agent
+
+    env:
+      MOLECULE_EPHEMERAL_DIRECTORY: "${{ github.workspace }}/.molecule"
 
     steps:
       - uses: actions/checkout@v4
@@ -50,14 +53,11 @@ jobs:
       - name: Install python dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: Create molecule qemu images directory
-        run: mkdir -p /home/runner/.cache/molecule/.qemu/images
-
       - name: Cache qemu images
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/molecule/.qemu/images
-          key: ${{ runner.os }}-qemu-${{ hashFiles('/home/runner/.cache/molecule/.qemu/images/*') }}
+          key: ${{ runner.os }}-qemu-${{ hashFiles('.molecule/.qemu/images/*') }}
           save-always: true
 
       - name: Run ${{ matrix.scenario }} scenario
